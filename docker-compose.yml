@@ -1,6 +1,6 @@
 services:
   baikal:
-    build: .
+    build: nginx.dockerfile
     container_name: baikal
     restart: unless-stopped
     volumes:
