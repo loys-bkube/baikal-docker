@@ -28,7 +28,17 @@ RUN curl -o /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
     msmtp msmtp-mta           &&\
   rm -rf /var/lib/apt/lists/* &&\
   sed -i 's/www-data/nginx/' /etc/php/8.5/fpm/pool.d/www.conf &&\
-  sed -i 's/^listen = .*/listen = \/var\/run\/php-fpm.sock/' /etc/php/8.5/fpm/pool.d/www.conf
+  sed -i 's/^listen = .*/listen = \/var\/run\/php-fpm.sock/' /etc/php/8.5/fpm/pool.d/www.conf &&\
+  { \
+    echo 'pm = dynamic'; \
+    echo 'pm.max_children = 20'; \
+    echo 'pm.start_servers = 4'; \
+    echo 'pm.min_spare_servers = 2'; \
+    echo 'pm.max_spare_servers = 6'; \
+    echo 'pm.max_requests = 500'; \
+    echo 'request_terminate_timeout = 60s'; \
+    echo 'catch_workers_output = yes'; \
+  } >> /etc/php/8.5/fpm/pool.d/www.conf
 
 # Add Baikal & nginx configuration
 COPY files/docker-entrypoint.d/*.sh files/docker-entrypoint.d/*.php files/docker-entrypoint.d/nginx/ /docker-entrypoint.d/
