@@ -17,6 +17,7 @@ services:
       start_period: 10s
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=frontend"
 
       # Router
       - "traefik.http.routers.baikal.rule=Host(`cal.mydomain.net`)"
